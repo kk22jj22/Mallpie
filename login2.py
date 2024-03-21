@@ -23,7 +23,7 @@ driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/ul/li[1]').c
 
 try:
     # 캡챠 미발생 시 
-    # BranchTEST
+    # BranchTEST2
     kakao_id = 'kk22jj22@gmail.com'
     kakao_pw = 'rlawl128'
 
@@ -46,6 +46,7 @@ try:
 
 except NoSuchElementException as e: 
     #캡챠 발생 시
+    #Branch test
     print('캡챠 발생')
     driver.switch_to.frame(driver.find_element(By.XPATH, '//*[@id="captchaContainer"]/div/div/div/div/div/div/iframe'))
     driver.find_element(By.XPATH, '//*[@id="recaptcha-anchor"]/div[1]').click()
