@@ -22,7 +22,8 @@ driver.find_element(By.XPATH, '//*[@id="__next"]/div/header/nav[2]/div[3]/span')
 driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/ul/li[1]').click()
 
 try:
-    #캡챠 미발생 시
+    # 캡챠 미발생 시 
+    # BranchTEST
     kakao_id = 'kk22jj22@gmail.com'
     kakao_pw = 'rlawl128'
 
