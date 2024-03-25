@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -10,6 +11,7 @@ options.add_experimental_option("detach", True)
 
 service = ChromeService(executable_path=ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service, options=options)
+
 driver.implicitly_wait(3)
 
 driver.get(url='https://jirory2.mallpie.kr/')
@@ -28,13 +30,17 @@ print(user_name+'으로 로그인 완료')
 print('마이페이지 진입..')
 driver.find_element(By.XPATH, '//*[@id="__next"]/div/header/nav[2]/div[3]').click()
 
-user_namenickname = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/ul[1]/li/div[1]/div[1]').text
-user_email = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/ul[1]/li/div[1]/div[2]').text
+print('로그아웃')
+driver.find_element(By.XPATH, '//*[@id="__next"]/div/div[1]/div[2]/div/div[1]/div[2]').click()
 
+print('로그인 페이지 진입')
+driver.find_element(By.XPATH, '//*[@id="__next"]/div/header/nav[2]/div[3]/span').click()
 
-if(user_namenickname) == '김지원(지로리)' and user_email == email:
-    print(user_namenickname+', '+user_email+' 로그인 완료')
-    print('login1 pass')
-else:
-    print('login1 fail')
-    print('사유 : '+user_namenickname+', '+user_email)
+login_page_message = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[3]').text
+
+print(login_page_message)
+
+if '몰파이의 마이몰 서비스로 만들어진 쇼핑몰 입니다.' in login_page_message :
+    print('login4 pass')
+else :
+    print('login4 fail')
