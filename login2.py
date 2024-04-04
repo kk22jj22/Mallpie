@@ -8,9 +8,11 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 options = Options()
 options.add_experimental_option("detach", True)
-
 service = ChromeService(executable_path=ChromeDriverManager().install())
+options.add_extension('D:\\extensions\\MPBJKEJCLGFGADIEMMEFGEBJFOOFLFHL_2_0_1_0.crx')
+
 driver = webdriver.Chrome(service=service, options=options)
+
 
 driver.implicitly_wait(3)
 
@@ -22,7 +24,6 @@ driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/ul/li[1]').c
 
 try:
     # 캡챠 미발생 시 
-    # BranchTEST2
     kakao_id = 'kk22jj22@gmail.com'
     kakao_pw = 'rlawl128'
 
@@ -44,14 +45,21 @@ try:
         print('사유 : '+user_namenickname+', '+user_email)
 
 except NoSuchElementException as e: 
+    
     #캡챠 발생 시
-    #Branch test
     print('캡챠 발생')
     driver.switch_to.frame(driver.find_element(By.XPATH, '//*[@id="captchaContainer"]/div/div/div/div/div/div/iframe'))
     driver.find_element(By.XPATH, '//*[@id="recaptcha-anchor"]/div[1]').click()
     
     # 캡챠 발생 후 예외처리 작성 필요
 
+    
+    if(user_namenickname) == '김지원(김지원ㅋㅋ)' and user_email == kakao_id:
+        print(user_namenickname+', '+user_email+' 로그인 완료')
+        print('login2 pass')
+    else:
+        print('login2 fail')
+        print('사유 : '+user_namenickname+', '+user_email)
 
     
     

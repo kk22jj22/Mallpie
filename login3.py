@@ -8,8 +8,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 options = Options()
 options.add_experimental_option("detach", True)
-
 service = ChromeService(executable_path=ChromeDriverManager().install())
+
 driver = webdriver.Chrome(service=service, options=options)
 
 driver.implicitly_wait(3)
