@@ -55,7 +55,7 @@ except NoSuchElementException as e:
 
     
     if(user_namenickname) == '김지원(김지원ㅋㅋ)' and user_email == kakao_id:
-        print(user_namenickname+', '+user_email+' 로그인 완료')
+        print(user_namenickname+', '+user_email+' 카카오 로그인 완료')
         print('login2 pass')
     else:
         print('login2 fail')

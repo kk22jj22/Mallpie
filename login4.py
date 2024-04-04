@@ -32,8 +32,6 @@ driver.find_element(By.XPATH, '//*[@id="__next"]/div/header/nav[2]/div[3]').clic
 
 print('로그아웃')
 driver.find_element(By.XPATH, '//*[@id="__next"]/div/div[1]/div[2]/div/div[1]/div[2]').click()
-
-print('로그인 페이지 진입')
 driver.find_element(By.XPATH, '//*[@id="__next"]/div/header/nav[2]/div[3]/span').click()
 
 login_page_message = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[3]').text
