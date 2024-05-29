@@ -18,12 +18,12 @@ action = ActionChains(driver)
 
 driver.implicitly_wait(3)
 
-driver.get(url='https://jirory2.mallpie.kr/product/10000042')
+driver.get(url='https://jirory2.mallpie.kr/')
 
 email = 'jwkim@genieworks.net'
 password = 'sellerd2$'
 
-driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[3]/button').click()
+driver.find_element(By.XPATH, '//*[@id="__next"]/div/header/nav[2]/div[3]/span').click()
 driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/form/div[1]/label/div/input').send_keys(email)
 driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/form/div[2]/label/div/input').send_keys(password)
 driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/form/button').click()
@@ -31,29 +31,52 @@ driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/form/button'
 user_name = driver.find_element(By.XPATH, '//*[@id="__next"]/div/header/nav[2]/div[3]').text
 print(user_name+'으로 로그인 완료')
 
-try :
-    #단일상품 주문서 진입
-    driver.implicitly_wait(10)
-    driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[3]/button').click()
-    print('단일상품 - 주문서 진입')
+try:
+    # 옵션상품 - 1단
+    # 상품 판매안함/삭제 시 예외처리
+    # 옵션1번 클릭 > 품절이면 > 옵션2번 클릭 > 구매하기    
+    driver.get(url='https://jirory2.mallpie.kr/product/10000047')
+    driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[2]/div/div/div').click()
 
+    is_soldout = True
+    i = 1
+
+    while is_soldout == True :     
+        prd_option = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[2]/div/div/ul/li['+str(i)+']').text
+        is_True = ('품절' in prd_option) or (prd_option == '')
+        
+        if is_True == True and is_soldout == True:
+            is_soldout = True  
+
+            i = i+1
+            prd_option2 = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[2]/div/div/ul/li['+str(i)+']').click()
+        
+        else : 
+            is_soldout = False
+            
+            prd_option = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[2]/div/div/ul/li[1]').click()
+            driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[3]/button').click()
+            break
+
+    # 주문서 진입
     bankpayment_btn = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/div[6]/div[2]/div/fieldset/div[4]/label/input')
-
     action.move_to_element(bankpayment_btn).perform()
     bankpayment_btn.click()
-    print('결제수단 : 무통장입금')
+    print('결제수단 - 무통장입금')
     driver.implicitly_wait(10)
 
+    # 화면 최하단으로 이동
     pyautogui.press('end')
     driver.implicitly_wait(10)
 
+    # 주문에 동의하는 체크박스 클릭
     order_checkbox = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/div[8]/div[3]/div/label/span[1]')
     order_btn = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/div[9]/button')
+    driver.implicitly_wait(10)
     order_checkbox.click()
     order_btn.click()
 
     driver.implicitly_wait(10)
-
     print('tosspayments pg 진입')
     order_iframe = driver.find_element(By.ID, 'imp-iframe')
     driver.switch_to.frame(order_iframe)
@@ -75,10 +98,12 @@ try :
 
     if isDisplayed == True :
         driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[2]/button[2]').click()
-        driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/div/div/div[3]/div/div[1]/div[1]/div[2]').click()
-        print('product1 pass')
+        order_num = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/div/div/div[3]/div/div[1]/div[1]/div[1]/span').text
+        print('주문번호 : '+order_num)
+        print('product2 pass')
+
     else :
-        print('product1 fail')
+        print('product2 fail. 주문완료 실패.')
 
 except NoSuchElementException as e :
-    print('product1 fail - 상품 상태를 확인해주세요.')
+    print('product2 fail. 상품 상태를 확인해주세요')
