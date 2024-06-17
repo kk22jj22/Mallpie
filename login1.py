@@ -13,7 +13,7 @@ driver = webdriver.Chrome(service=service, options=options)
 
 driver.implicitly_wait(3)
 
-driver.get(url='https://jirory2.mallpie.kr/')
+driver.get(url='https://jirory4.mallpie.kr/')
 
 email = 'jwkim@genieworks.net'
 password = 'sellerd2$'

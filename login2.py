@@ -16,7 +16,7 @@ driver = webdriver.Chrome(service=service, options=options)
 
 driver.implicitly_wait(3)
 
-driver.get(url='https://jirory2.mallpie.kr/')
+driver.get(url='https://jirory4.mallpie.kr/')
 
 
 driver.find_element(By.XPATH, '//*[@id="__next"]/div/header/nav[2]/div[3]/span').click()
