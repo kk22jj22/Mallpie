@@ -21,7 +21,7 @@ password = 'sellerd2$'
 driver.find_element(By.XPATH, '//*[@id="__next"]/div/header/nav[2]/div[3]/span').click()
 driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/form/div[1]/label/div/input').send_keys(email)
 driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/form/div[2]/label/div/input').send_keys(password)
-driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/form/button').click()
+driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/forgit m/button').click()
 
 user_name = driver.find_element(By.XPATH, '//*[@id="__next"]/div/header/nav[2]/div[3]').text
 print(user_name+'으로 로그인 완료')

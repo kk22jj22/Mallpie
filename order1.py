@@ -17,7 +17,7 @@ action = ActionChains(driver)
 
 driver.implicitly_wait(3)
 
-driver.get(url='https://jirory2.mallpie.kr/product/10000042')
+driver.get(url='https://jirory4.mallpie.kr/product/10001641')
 
 email = 'jwkim@genieworks.net'
 password = 'sellerd2$'
