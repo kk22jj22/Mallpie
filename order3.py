@@ -18,42 +18,88 @@ action = ActionChains(driver)
 
 driver.implicitly_wait(3)
 
-driver.get(url='https://jirory2.mallpie.kr/product/10000042')
+try:
+    driver.get(url='https://jirory4.mallpie.kr/')
+    driver.maximize_window()
 
-email = 'jwkim@genieworks.net'
-password = 'sellerd2$'
+    email = 'jwkim@genieworks.net'
+    password = 'sellerd2$'
 
-driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[3]/button').click()
-driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/form/div[1]/label/div/input').send_keys(email)
-driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/form/div[2]/label/div/input').send_keys(password)
-driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/form/button').click()
+    driver.find_element(By.XPATH, '//*[@id="__next"]/div/header/nav[2]/div[3]/span').click()
+    driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/form/div[1]/label/div/input').send_keys(email)
+    driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/form/div[2]/label/div/input').send_keys(password)
+    driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/form/button').click()
 
-user_name = driver.find_element(By.XPATH, '//*[@id="__next"]/div/header/nav[2]/div[3]').text
-print(user_name+'으로 로그인 완료')
+    user_name = driver.find_element(By.XPATH, '//*[@id="__next"]/div/header/nav[2]/div[3]').text
+    print(user_name+'으로 로그인 완료')
 
-driver.implicitly_wait(10)
-Product_name = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[1]/div[1]/div[1]').text
-Product_price = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[3]/div[1]/div').text
-print('상품명 : '+Product_name+', 가격 : '+Product_price)
+    # 옵션상품 - 2단
+    # 상품 판매안함/삭제 시 예외처리
+    # 옵션1번 클릭 > 품절이면 > 옵션2번 클릭 > 구매하기    
+    driver.get(url='https://jirory4.mallpie.kr/product/10001651')
+    driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[2]/div/div/div').click()
 
-try :
-    print('주문서 진입')
-    driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[3]/button').click()
+    is_soldout = True
+    is_soldout2 = True
+    i = 1
+    j = 1
+
+    while is_soldout == True :     
+        prd_option = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[2]/div/div/ul/li['+str(i)+']').text
+        is_True = ('품절' in prd_option) or (prd_option == '')
+        
+        if is_True == True and is_soldout == True:
+            is_soldout = True  
+
+            i = i+1
+            prd_option = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[2]/div/div/ul/li['+str(i)+']').click()
+            
+        else : 
+            is_soldout = False
+           
+            prd_option = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[2]/div/div/ul/li[1]').click()
+            driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[2]/div[2]/div/div').click()
+            
+            while is_soldout2 == True :     
+                prd_option2 = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[2]/div[2]/div/ul/li['+str(j)+']').text
+                is_True2 = ('품절' in prd_option2) or (prd_option2 == '')
+                
+                if is_True2 == True and is_soldout2 == True:
+                    is_soldout2 = True 
+
+                    j = j+1
+                    prd_option2 = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[2]/div[2]/div/ul/li['+str(j)+']').click()
+                    
+                else : 
+                    is_soldout = False
+                    
+                    driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[2]/div[2]/div/ul/li[1]').click()
+                    pyautogui.press('pgdn')
+                    driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[3]/button').click()
+                    
+            break
+
+    # 주문서 진입
+    pyautogui.press('pgdn')
+    
     bankpayment_btn = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/div[6]/div[2]/div/fieldset/div[4]/label/input')
-
     action.move_to_element(bankpayment_btn).perform()
     bankpayment_btn.click()
-    driver.implicitly_wait(30)
+    print('결제수단 - 무통장입금')
+    driver.implicitly_wait(10)
 
+    # 화면 최하단으로 이동
     pyautogui.press('end')
-    driver.implicitly_wait(30)
+    driver.implicitly_wait(10)
 
+    # 주문에 동의하는 체크박스 클릭
     order_checkbox = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/div[8]/div[3]/div/label/span[1]')
     order_btn = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/div[9]/button')
+    driver.implicitly_wait(10)
     order_checkbox.click()
     order_btn.click()
 
-    driver.implicitly_wait(30)
+    driver.implicitly_wait(10)
 
     print('tosspayments pg 진입')
     order_iframe = driver.find_element(By.ID, 'imp-iframe')
@@ -71,51 +117,17 @@ try :
 
     driver.implicitly_wait(20)
     driver.switch_to.default_content()
-    print('주문 완료')
-    
+
     isDisplayed = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[2]/button[2]').is_displayed()
 
     if isDisplayed == True :
-        #마이페이지 > 주문내역 > 주문번호 확인 > 닫기
-        driver.find_element(By.XPATH, '//*[@id="__next"]/div/header/nav[2]/div[3]').click()
-        driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/ul[3]/li[1]/div[2]').click()
-        Order_Num = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/div/div/div[3]/div/div[1]/div[1]/div[1]/span').text
-        print('주문번호 : '+Order_Num)
-        
-        driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/div/div/div[3]/div/div[1]/div[2]/div[3]/button[1]').click()
-        driver.find_element(By.XPATH, '//*[@id="__next"]/div[2]/form/div/div/div[1]/div[2]/button[2]').click()        
-        Cancel_Msg = driver.find_element(By.XPATH, '//*[@id="__next"]/div[2]/div/div/div[1]/div[1]/div[2]/div[1]/h6').text        
-        driver.find_element(By.XPATH, '//*[@id="__next"]/div[2]/div/div/div[1]/div[2]/button').click()
-        
-        if(Cancel_Msg == '주문이 취소되었습니다.') :
-            #취소/반품/교환 탭 진입
-            driver.implicitly_wait(30)
-            driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/ul/li[2]').click()
-                               
-            #주문번호 비교하고, 같다면 해당 주문번호 주문 상세 진입
-            Cancel_Num = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/div/div/div[2]/div/div[1]/div[1]/div[1]/span').text
-            if(Order_Num == Cancel_Num) :
-                driver.find_element(By.XPATH, '//*[@id="__next"]/div/div[1]/div[2]/div/div/div[2]/div/div[1]/div[1]/div[2]/p').click()
-                
-                #Cancel_Status == 취소완료, 취소 금액이 - + 'Product_Price라면' order3 Pass
-                Cancel_Status = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/ul/li/ul/li/div[1]/div').text
-                Cancel_Price = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/div[3]/div/div[3]/p[2]').text
-                
-                if(Cancel_Status == '취소완료') and (Cancel_Price == '-'+Product_price) :                  
-                    print('주문번호 : '+Cancel_Num+', 상태 : '+Cancel_Status+', 취소 금액 : '+Product_price)
-                    driver.implicitly_wait(30)
-                    print('order3 pass')
-                    driver.quit()
-                    
-                else :
-                    print('order3 fail - 주문번호 불일치')
-            else :
-                print('order3 fail - 주문취소 되지 않음')
-            
-    else :
-        print('order3 fail')
-        driver.quit()
+        driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[2]/button[2]').click()
+        order_num = driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div[2]/div/div/div[3]/div/div[1]/div[1]/div[1]/span').text
+        print('주문번호 : '+order_num)
+        print('order3 pass')
 
+    else :
+        print('order3 fail. 주문완료 실패.')
 
 except NoSuchElementException as e :
-    print('order 3 fail - NoSuchElementException')
+    print('order3 fail. 로그인/상품 상태를 확인해주세요')
