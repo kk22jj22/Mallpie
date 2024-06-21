@@ -12,17 +12,17 @@ import pyautogui
 options = Options()
 options.add_experimental_option("detach", True)
 service = ChromeService(executable_path=ChromeDriverManager().install())
-
 driver = webdriver.Chrome(service=service, options=options)
 action = ActionChains(driver)
 
 driver.implicitly_wait(3)
 
 try :
-    driver.get(url='https://jirory4.mallpie.kr/')
-
     email = 'jwkim@genieworks.net'
     password = 'sellerd2$'
+
+    driver.get(url='https://jirory4.mallpie.kr/')
+    driver.maximize_window()
 
     driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div/div[1]/div[2]/div[3]/button').click()
     driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/form/div[1]/label/div/input').send_keys(email)

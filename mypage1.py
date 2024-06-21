@@ -12,19 +12,18 @@ from selenium.webdriver.common.action_chains import ActionChains
 options = Options()
 options.add_experimental_option("detach", True)
 service = ChromeService(executable_path=ChromeDriverManager().install())
-
 driver = webdriver.Chrome(service=service, options=options)
 action = ActionChains(driver)
 
-email = 'jwkim@genieworks.net'
-password = 'sellerd2$'
-
 driver.implicitly_wait(3)
 
-driver.get(url='https://jirory4.mallpie.kr/')
-driver.maximize_window()
-
 try:
+    email = 'jwkim@genieworks.net'
+    password = 'sellerd2$'
+
+    driver.get(url='https://jirory4.mallpie.kr/')
+    driver.maximize_window()
+    
     driver.find_element(By.XPATH, '//*[@id="__next"]/div/header/nav[2]/div[3]/span').click()
     driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/form/div[1]/label/div/input').send_keys(email)
     driver.find_element(By.XPATH, '//*[@id="__next"]/div/div/div/div[4]/form/div[2]/label/div/input').send_keys(password)
